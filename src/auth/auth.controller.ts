@@ -12,9 +12,9 @@ export class AuthController {
         return this.auth.login(email, password)
     }
 
-    @Post()
+    @Post('register')
     async register(@Body() { name, email, password }: CreateUserDto) {
-
+        return this.auth.register({ name, email, password })
     }
 
     @Post()

@@ -56,14 +56,18 @@ export class AuthService {
             }
         })
 
-        if(!user) {
+        if (!user) {
             throw new UnauthorizedException('Email/senha erradas')
         }
 
-        if(password != user.password) {
+        if (password != user.password) {
             throw new UnauthorizedException('Email/senha erradas')
         }
 
         return this.createToken(user)
+    }
+
+    async register({ email, password, name }) {
+        return this.user.create({ name, email, password })
     }
 }
