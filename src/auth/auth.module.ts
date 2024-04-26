@@ -9,6 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports: [UserModule,PrismaModule,JwtModule]
+  imports: [UserModule,PrismaModule,JwtModule.register({
+    secret:process.env.JWT_SECRET
+  })]
 })
 export class AuthModule {}

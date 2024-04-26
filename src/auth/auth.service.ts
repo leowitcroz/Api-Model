@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { user } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -47,5 +47,23 @@ export class AuthService {
         catch (e) {
             return false
         }
+    }
+
+    async login(email: string, password: string) {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
+
+        if(!user) {
+            throw new UnauthorizedException('Email/senha erradas')
+        }
+
+        if(password != user.password) {
+            throw new UnauthorizedException('Email/senha erradas')
+        }
+
+        return this.createToken(user)
     }
 }
