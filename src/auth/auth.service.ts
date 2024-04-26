@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { user } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,6 +24,28 @@ export class AuthService {
                 expiresIn: '7 days',
                 subject: String(user.id)
             })
+        }
+    }
+
+    async checkToken(token: string) {
+        try {
+            const data = this.jwt.verify(token, {
+                issuer: this.issuer,
+                audience: this.audience,
+            });
+            return data
+        } catch (e) {
+            throw new BadRequestException(e)
+        }
+    }
+
+    async validateToken(token: string) {
+        try {
+            this.checkToken(token)
+            return true
+        }
+        catch (e) {
+            return false
         }
     }
 }
