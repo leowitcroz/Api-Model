@@ -1,6 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { AuthGuard } from 'src/guard/auth.guard';
+import { User } from 'src/decorator/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +22,13 @@ export class AuthController {
     @Post()
     async forget(@Body() { name, email, password }: CreateUserDto) {
 
+    }
+
+    @UseGuards(AuthGuard)
+    @Post('me')
+    async me(@User('id') user) {
+
+        return { user: user }
     }
 
     @Post()
