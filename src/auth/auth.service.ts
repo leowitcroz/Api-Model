@@ -67,7 +67,7 @@ export class AuthService {
         return this.createToken(user)
     }
 
-    async register({ email, password, name }) {
-        return this.user.create({ name, email, password })
+    async register({ email, password, name, role }) {
+        return this.user.create({ name, email, password, role })
     }
 }
